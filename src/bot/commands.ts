@@ -59,7 +59,7 @@ export async function handleTelegramCommand(
           );
         }
         await db.addRoleToUserByUsername(role.id, username);
-  await reply("Role '" + roleName + "' assigned to user @" + username);
+        await reply("Role '" + roleName + "' assigned to user @" + username);
       } catch (err: any) {
         await reply("Failed to add user to role: " + err.message);
       }
@@ -77,7 +77,9 @@ export async function handleTelegramCommand(
         const role = await db.getRole(roleName, chatId);
         if (!role) return await reply("Role not found: " + roleName);
         await db.removeRoleFromUserByUsername(role.id, username);
-  await reply("Role '" + roleName + "' unassigned from user @" + username);
+        await reply(
+          "Role '" + roleName + "' unassigned from user @" + username,
+        );
       } catch (err: any) {
         await reply("Failed to remove user from role: " + err.message);
       }
@@ -91,9 +93,13 @@ export async function handleTelegramCommand(
         if (!role) return await reply("Role not found: " + roleName);
         const usernames = await db.getRoleMemberUsernames(role.id);
         if (!usernames.length)
-          return await reply("No users have been assigned the role '" + roleName + "'.");
+          return await reply(
+            "No users have been assigned the role '" + roleName + "'.",
+          );
         const msg = usernames.map((u: string) => "@" + u).join("\n");
-        await reply("Users who have been assigned the role '" + roleName + "':\n" + msg);
+        await reply(
+          "Users who have been assigned the role '" + roleName + "':\n" + msg,
+        );
       } catch (err: any) {
         await reply("Failed to get role members: " + err.message);
       }
@@ -107,16 +113,20 @@ export async function handleTelegramCommand(
         if (!role) return await reply("Role not found: " + roleName);
         const usernames = await db.getRoleMemberUsernames(role.id);
         if (!usernames.length)
-          return await reply("No users have been assigned the role '" + roleName + "'.");
+          return await reply(
+            "No users have been assigned the role '" + roleName + "'.",
+          );
         const mentions = usernames.map((u: string) => "@" + u).join(" ");
-        await reply("Notifying users assigned the role '" + roleName + "': " + mentions);
+        await reply(
+          "Notifying users assigned the role '" + roleName + "': " + mentions,
+        );
       } catch (err: any) {
         await reply("Failed to get role members: " + err.message);
       }
       break;
     }
     case "/help": {
-  const helpMsg = `Available commands:\n/createrole <name> - Create a new role\n/deleterole <role_name> - Delete a role\n/listroles - List all roles\n/assign <role_name> <@username> - Assign a role to a user\n/unassign <role_name> <@username> - Unassign a role from a user\n/roleusers <role_name> - View users assigned to a role\n/ping <role_name> - Notify all users assigned to a role\n/help - Show this help message`;
+      const helpMsg = `Available commands:\n/createrole <name> - Create a new role\n/deleterole <role_name> - Delete a role\n/listroles - List all roles\n/assign <role_name> <@username> - Assign a role to a user\n/unassign <role_name> <@username> - Unassign a role from a user\n/roleusers <role_name> - View users assigned to a role\n/ping <role_name> - Notify all users assigned to a role\n/help - Show this help message`;
       await reply(helpMsg);
       break;
     }
