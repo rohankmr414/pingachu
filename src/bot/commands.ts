@@ -8,11 +8,6 @@ export async function handleTelegramCommand(
   reply: (msg: string) => Promise<void>,
 ) {
   switch (command) {
-    case "/start":
-      await reply(
-        "Hello! This is a minimal Telegram bot running on Cloudflare Workers.",
-      );
-      break;
     case "/createrole": {
       if (args.length < 1) return await reply("Usage: /createrole <name>");
       const name = args[0];

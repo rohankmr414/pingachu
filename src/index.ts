@@ -1,4 +1,4 @@
-import { handleTelegramCommand } from "./commands/telegramCommands";
+import { handleTelegramCommand } from "./bot/commands";
 import { DB } from "./db/d1";
 const WEBHOOK = "/webhook";
 
