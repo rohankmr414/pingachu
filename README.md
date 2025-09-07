@@ -1,59 +1,63 @@
-# Worker + D1 Database
+# Pingachu
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/d1-template)
+A minimal Telegram bot for managing roles in group chats, running on Cloudflare Workers and D1.
 
-![Worker + D1 Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public)
+## Features
 
-<!-- dash-content-start -->
+- Create, delete, and list roles
+- Assign/unassign users to roles
+- List users in a role
+- Mention all users in a role
+- `/help` command for usage info
+- Fast, serverless, and easy to deploy
 
-D1 is Cloudflare's native serverless SQL database ([docs](https://developers.cloudflare.com/d1/)). This project demonstrates using a Worker with a D1 binding to execute a SQL statement. A simple frontend displays the result of this query:
-
-```SQL
-SELECT * FROM comments LIMIT 3;
-```
-
-The D1 database is initialized with a `comments` table and this data:
-
-```SQL
-INSERT INTO comments (author, content)
-VALUES
-    ('Kristian', 'Congrats!'),
-    ('Serena', 'Great job!'),
-    ('Max', 'Keep up the good work!')
-;
-```
-
-> [!IMPORTANT]
-> When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/d1-template#setup-steps) before deploying.
-
-<!-- dash-content-end -->
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+## Commands
 
 ```
-npm create cloudflare@latest -- --template=cloudflare/templates/d1-template
+/createrole <name>           - Create a new role
+/deleterole <role_name>      - Delete a role
+/listroles                   - List all roles
+/assign <role_name> <@user>  - Assign a role to a user
+/unassign <role_name> <@user>- Remove a user from a role
+/roleusers <role_name>       - List users in a role
+/ping <role_name>            - Mention all users in a role
+/help                        - Show help message
 ```
 
-A live public deployment of this template is available at [https://d1-template.templates.workers.dev](https://d1-template.templates.workers.dev)
+## Setup
 
-## Setup Steps
+1. **Clone the repo and install dependencies:**
 
-1. Install the project dependencies with a package manager of your choice:
-   ```bash
+   ```sh
+   git clone <repo-url>
+   cd <repo-folder>
    npm install
    ```
-2. Create a [D1 database](https://developers.cloudflare.com/d1/get-started/) with the name "d1-template-database":
-   ```bash
-   npx wrangler d1 create d1-template-database
+
+2. **Set your Telegram bot token as a secret:**
+
+   ```sh
+   npx wrangler secret put PINGACHU_BOT_TOKEN
    ```
-   ...and update the `database_id` field in `wrangler.json` with the new database ID.
-3. Run the following db migration to initialize the database (notice the `migrations` directory in this project):
-   ```bash
-   npx wrangler d1 migrations apply --remote d1-template-database
+
+3. **Deploy to Cloudflare Workers:**
+
+   ```sh
+   npm run deploy
    ```
-4. Deploy the project!
-   ```bash
-   npx wrangler deploy
+
+4. **Set your Telegram webhook:**
+   ```sh
+   curl -X POST "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook" \
+     -d "url=https://<your-worker>.workers.dev/webhook"
    ```
+
+## Notes
+
+- The bot supports commands with or without the `@botusername` suffix (e.g., `/start@yourbot`).
+- Requires Cloudflare D1 for persistent role storage.
+- All logic is in ES module format and split for maintainability.
+
+## License
+
+MIT
