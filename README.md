@@ -4,24 +4,24 @@ A minimal Telegram bot for managing roles in group chats, running on Cloudflare 
 
 ## Features
 
-- Create, delete, and list roles
-- Assign/unassign users to roles
-- List users in a role
-- Mention all users in a role
-- `/help` command for usage info
-- Fast, serverless, and easy to deploy
+ - Create, delete, and list roles
+ - Assign or unassign roles for users
+ - View users assigned to a role
+ - Notify all users assigned to a role
+ - `/help` command for usage instructions
+ - Fast, serverless, and easy to deploy
 
 ## Commands
 
 ```
-/createrole <name>           - Create a new role
-/deleterole <role_name>      - Delete a role
-/listroles                   - List all roles
-/assign <role_name> <@user>  - Assign a role to a user
-/unassign <role_name> <@user>- Remove a user from a role
-/roleusers <role_name>       - List users in a role
-/ping <role_name>            - Mention all users in a role
-/help                        - Show help message
+/createrole <name>             - Create a new role
+/deleterole <role_name>        - Delete a role
+/listroles                     - List all roles
+/assign <role_name> <@user>    - Assign a role to a user
+/unassign <role_name> <@user>  - Unassign a role from a user
+/roleusers <role_name>         - View users assigned to a role
+/ping <role_name>              - Notify all users assigned to a role
+/help                          - Show usage instructions
 ```
 
 ## Setup
