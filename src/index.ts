@@ -10,23 +10,24 @@ export default {
   ): Promise<Response> {
     const url = new URL(request.url);
     const TOKEN = env.PINGACHU_BOT_TOKEN;
+    const D1DB = env.pingachu;
 
     if (url.pathname === WEBHOOK) {
       const update = await request.json();
-      ctx.waitUntil(onUpdate(update, TOKEN, env));
+      ctx.waitUntil(onUpdate(update, TOKEN, D1DB));
       return new Response("Ok");
     }
     return new Response("No handler for this request");
   },
 };
 
-async function onUpdate(update: any, TOKEN: string, env: Env) {
+async function onUpdate(update: any, TOKEN: string, D1DB: D1Database) {
   if ("message" in update) {
-    await onMessage(update.message, TOKEN, env);
+    await onMessage(update.message, TOKEN, D1DB);
   }
 }
 
-async function onMessage(message: any, TOKEN: string, env: Env) {
+async function onMessage(message: any, TOKEN: string, D1DB: D1Database) {
   const chatId = message.chat.id;
   const text = message.text || "";
   const args = text.split(" ");
@@ -43,10 +44,6 @@ async function onMessage(message: any, TOKEN: string, env: Env) {
     });
   }
 
-  if (!env?.pingachu) {
-    await reply("Database not configured.");
-    return;
-  }
-  const db = new DB(env.pingachu);
+  const db = new DB(D1DB);
   await handleTelegramCommand(command, args, chatId, db, reply);
 }
