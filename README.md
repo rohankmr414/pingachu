@@ -34,10 +34,11 @@ A minimal Telegram bot for managing roles in group chats, running on Cloudflare 
    npm install
    ```
 
-2. **Set your Telegram bot token as a secret:**
+2. **Add your secrets to Cloudflare Workers:**
 
    ```sh
-   npx wrangler secret put PINGACHU_BOT_TOKEN
+   npx wrangler secret put PINGACHU_BOT_TOKEN         # Telegram bot token
+   npx wrangler secret put TELEGRAM_WEBHOOK_SECRET    # Secret for verifying Telegram webhooks
    ```
 
 3. **Deploy to Cloudflare Workers:**
@@ -49,7 +50,8 @@ A minimal Telegram bot for managing roles in group chats, running on Cloudflare 
 4. **Set your Telegram webhook:**
    ```sh
    curl -X POST "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook" \
-     -d "url=https://<your-worker>.workers.dev/webhook"
+     -d "url=https://<your-worker>.workers.dev/webhook" \
+     -d "secret_token=<YOUR_SECRET_TOKEN>"
    ```
 
 ## Notes
