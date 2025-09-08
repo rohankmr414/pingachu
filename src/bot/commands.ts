@@ -132,7 +132,7 @@ export async function handleTelegramCommand(
         "*Available Commands:*\n\n" +
         "`/createrole <name>` — Create a new role\n" +
         "`/deleterole <role_name>` — Delete a role\n" +
-        "`/listroles` — List all roles\n" +
+        "`/listroles` — List all roles available in this chat\n" +
         "`/assign <role_name> <@username>` — Assign a role to a user\n" +
         "`/unassign <role_name> <@username>` — Unassign a role from a user\n" +
         "`/roleusers <role_name>` — View users assigned to a role\n" +
