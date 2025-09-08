@@ -120,7 +120,7 @@ export async function handleTelegramCommand(
           );
         const mentions = usernames.map((u: string) => "@" + u).join(" ");
         await reply(
-          "Notifying users assigned the role '" + roleName + "':\n" + mentions,
+          "Notifying users assigned the role `" + roleName + "`:\n" + mentions,
         );
       } catch (err: any) {
         await reply("Failed to get role members: " + err.message);
