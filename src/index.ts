@@ -13,6 +13,12 @@ export default {
     const D1DB = env.pingachu;
 
     if (url.pathname === WEBHOOK) {
+        // Check Telegram webhook secret token
+        const secretToken = env.TELEGRAM_WEBHOOK_SECRET;
+        const headerToken = request.headers.get("X-Telegram-Bot-Api-Secret-Token");
+        if (!secretToken || headerToken !== secretToken) {
+          return new Response("Forbidden", { status: 403 });
+        }
       const update = await request.json();
       ctx.waitUntil(onUpdate(update, TOKEN, D1DB));
       return new Response("Ok");

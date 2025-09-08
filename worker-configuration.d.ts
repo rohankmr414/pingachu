@@ -5,6 +5,7 @@ declare namespace Cloudflare {
   interface Env {
     pingachu: D1Database;
     PINGACHU_BOT_TOKEN: string;
+    TELEGRAM_WEBHOOK_SECRET: string;
   }
 }
 interface Env extends Cloudflare.Env {}
