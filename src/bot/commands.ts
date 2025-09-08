@@ -13,7 +13,7 @@ export async function handleTelegramCommand(
       const name = args[0];
       try {
         const role = await db.createRole(name, chatId);
-        await reply("Role created: " + role.name);
+        await reply("Role created: `" + role.name + "`");
       } catch (err: any) {
         await reply("Failed to create role: " + err.message);
       }
@@ -24,7 +24,7 @@ export async function handleTelegramCommand(
       const roleName = args[0];
       try {
         await db.deleteRole(roleName, chatId);
-        await reply("Role deleted: " + roleName);
+        await reply("Role deleted: `" + roleName + "`");
       } catch (err: any) {
         await reply("Failed to delete role: " + err.message);
       }
@@ -34,8 +34,8 @@ export async function handleTelegramCommand(
       try {
         const roles = await db.listRoles(chatId);
         if (!roles.length) return await reply("No roles found.");
-        const msg = roles.map((r: any) => r.name).join("\n");
-        await reply("Roles:\n" + msg);
+        const msg = roles.map((r: any) => "`" + r.name + "`").join("\n");
+        await reply("Roles available for this chat:\n" + msg);
       } catch (err: any) {
         await reply("Failed to list roles: " + err.message);
       }
@@ -55,11 +55,13 @@ export async function handleTelegramCommand(
         const existingUsernames = await db.getRoleMemberUsernames(role.id);
         if (existingUsernames.includes(username)) {
           return await reply(
-            "User @" + username + " is already in role " + roleName,
+            "User `@" + username + "` is already in role `" + roleName + "`",
           );
         }
         await db.addRoleToUserByUsername(role.id, username);
-        await reply("Role '" + roleName + "' assigned to user @" + username);
+        await reply(
+          "Role `" + roleName + "` assigned to user `@" + username + "`",
+        );
       } catch (err: any) {
         await reply("Failed to add user to role: " + err.message);
       }
@@ -78,7 +80,7 @@ export async function handleTelegramCommand(
         if (!role) return await reply("Role not found: " + roleName);
         await db.removeRoleFromUserByUsername(role.id, username);
         await reply(
-          "Role '" + roleName + "' unassigned from user @" + username,
+          "Role `" + roleName + "` unassigned from user `@" + username + "`",
         );
       } catch (err: any) {
         await reply("Failed to remove user from role: " + err.message);
@@ -94,11 +96,11 @@ export async function handleTelegramCommand(
         const usernames = await db.getRoleMemberUsernames(role.id);
         if (!usernames.length)
           return await reply(
-            "No users have been assigned the role '" + roleName + "'.",
+            "No users have been assigned the role `" + roleName + "`.",
           );
-        const msg = usernames.map((u: string) => "@" + u).join("\n");
+        const msg = usernames.map((u: string) => "`@" + u + "`").join("\n");
         await reply(
-          "Users who have been assigned the role '" + roleName + "':\n" + msg,
+          "Users who have been assigned the role `" + roleName + "`:\n" + msg,
         );
       } catch (err: any) {
         await reply("Failed to get role members: " + err.message);
@@ -114,11 +116,11 @@ export async function handleTelegramCommand(
         const usernames = await db.getRoleMemberUsernames(role.id);
         if (!usernames.length)
           return await reply(
-            "No users have been assigned the role '" + roleName + "'.",
+            "No users have been assigned the role `" + roleName + "`.",
           );
         const mentions = usernames.map((u: string) => "@" + u).join(" ");
         await reply(
-          "Notifying users assigned the role '" + roleName + "': " + mentions,
+          "Notifying users assigned the role '" + roleName + "':\n" + mentions,
         );
       } catch (err: any) {
         await reply("Failed to get role members: " + err.message);
@@ -126,12 +128,21 @@ export async function handleTelegramCommand(
       break;
     }
     case "/help": {
-      const helpMsg = `Available commands:\n/createrole <name> - Create a new role\n/deleterole <role_name> - Delete a role\n/listroles - List all roles\n/assign <role_name> <@username> - Assign a role to a user\n/unassign <role_name> <@username> - Unassign a role from a user\n/roleusers <role_name> - View users assigned to a role\n/ping <role_name> - Notify all users assigned to a role\n/help - Show this help message`;
+      const helpMsg =
+        "*Available Commands:*\n\n" +
+        "`/createrole <name>` — Create a new role\n" +
+        "`/deleterole <role_name>` — Delete a role\n" +
+        "`/listroles` — List all roles\n" +
+        "`/assign <role_name> <@username>` — Assign a role to a user\n" +
+        "`/unassign <role_name> <@username>` — Unassign a role from a user\n" +
+        "`/roleusers <role_name>` — View users assigned to a role\n" +
+        "`/ping <role_name>` — Notify all users assigned to a role\n" +
+        "`/help` — Show usage instructions";
       await reply(helpMsg);
       break;
     }
     default:
-      // Optionally handle unknown commands
+      await reply("Unknown command. Use `/help` to see available commands.");
       break;
   }
 }
