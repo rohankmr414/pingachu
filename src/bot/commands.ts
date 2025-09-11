@@ -142,7 +142,6 @@ export async function handleTelegramCommand(
       break;
     }
     default:
-      await reply("Unknown command. Use `/help` to see available commands.");
       break;
   }
 }
