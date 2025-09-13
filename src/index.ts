@@ -45,7 +45,7 @@ async function onMessage(message: any, TOKEN: string, D1DB: D1Database) {
       body: JSON.stringify({
         chat_id: chatId,
         text: msg,
-        parse_mode: "MarkdownV2",
+        parse_mode: "Markdown",
       }),
     });
   }
