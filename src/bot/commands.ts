@@ -56,10 +56,10 @@ export async function handleTelegramCommand(
         let added: string[] = [];
         let already: string[] = [];
         for (const username of usernames) {
-        if (existingUsernames.includes(username)) {
+          if (existingUsernames.includes(username)) {
             already.push(username);
           } else {
-        await db.addRoleToUserByUsername(role.id, username);
+            await db.addRoleToUserByUsername(role.id, username);
             added.push(username);
           }
         }
@@ -88,7 +88,7 @@ export async function handleTelegramCommand(
         if (!role) return await reply("Role not found: " + roleName);
         let removed: string[] = [];
         for (const username of usernames) {
-        await db.removeRoleFromUserByUsername(role.id, username);
+          await db.removeRoleFromUserByUsername(role.id, username);
           removed.push(username);
         }
         let msg = "";
@@ -112,13 +112,9 @@ export async function handleTelegramCommand(
         if (!role) return await reply("Role not found: " + roleName);
         const usernames = await db.getRoleMemberUsernames(role.id);
         if (!usernames.length)
-          return await reply(
-            "No users have been assigned the role `" + roleName + "`.",
-          );
+          return await reply("No users have been assigned the role `" + roleName + "`.");
         const msg = usernames.map((u: string) => "`@" + u + "`").join("\n");
-        await reply(
-          "Users who have been assigned the role `" + roleName + "`:\n" + msg,
-        );
+        await reply("Users who have been assigned the role `" + roleName + "`:\n" + msg);
       } catch (err: any) {
         await reply("Failed to get role members: " + err.message);
       }
@@ -132,13 +128,9 @@ export async function handleTelegramCommand(
         if (!role) return await reply("Role not found: " + roleName);
         const usernames = await db.getRoleMemberUsernames(role.id);
         if (!usernames.length)
-          return await reply(
-            "No users have been assigned the role `" + roleName + "`.",
-          );
+          return await reply("No users have been assigned the role `" + roleName + "`.");
         const mentions = usernames.map((u: string) => "@" + u).join(" ");
-        await reply(
-          "Notifying users assigned the role `" + roleName + "`:\n" + mentions,
-        );
+        await reply("Notifying users assigned the role `" + roleName + "`:\n" + mentions);
       } catch (err: any) {
         await reply("Failed to get role members: " + err.message);
       }
