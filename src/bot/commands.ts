@@ -142,15 +142,25 @@ export async function handleTelegramCommand(
     }
     case "/help": {
       const helpMsg =
-        "*Available Commands:*\n" +
-        "`/createrole <name>` - Create a new role\n" +
-        "`/deleterole <role_name>` - Delete a role\n" +
-        "`/listroles` - List all roles available in this chat\n" +
-        "`/assign <role_name> <@username> [@username ...]` - Assign a role to one or more users\n" +
-        "`/unassign <role_name> <@username> [@username ...]` - Unassign a role from one or more users\n" +
-        "`/roleusers <role_name>` - View users assigned to a role\n" +
-        "`/ping <role_name>` - Notify all users assigned to a role\n" +
-        "`/help` - Show usage instructions";
+        "```\n" +
+        "Available Commands:\n\n" +
+        "/createrole <name>\n" +
+        "    Create a new role\n\n" +
+        "/deleterole <role_name>\n" +
+        "    Delete a role\n\n" +
+        "/listroles\n" +
+        "    List all roles in this chat\n\n" +
+        "/assign <role_name> <@user> [@user ...]\n" +
+        "    Assign role to users\n\n" +
+        "/unassign <role_name> <@user> [@user ...]\n" +
+        "    Unassign role from users\n\n" +
+        "/roleusers <role_name>\n" +
+        "    View users in a role\n\n" +
+        "/ping <role_name>\n" +
+        "    Notify users in a role\n\n" +
+        "/help\n" +
+        "    Show usage instructions\n" +
+        "```";
       await reply(helpMsg);
       break;
     }
