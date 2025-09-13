@@ -43,47 +43,64 @@ export async function handleTelegramCommand(
     }
     case "/assign": {
       if (args.length < 2)
-        return await reply("Usage: /assign <role_name> <@username>");
-      let [roleName, username] = args;
-      if (!username)
-        return await reply("Please provide a username as @username.");
-      if (username[0] === "@") username = username.slice(1);
-      username = username.toLowerCase();
+        return await reply("Usage: /assign <role_name> <@username> [@username...]");
+      const roleName = args[0];
+      let usernames = args
+        .slice(1)
+        .map((u) => (u.startsWith("@") ? u.slice(1) : u))
+        .map((u) => u.toLowerCase());
       try {
         const role = await db.getRole(roleName, chatId);
         if (!role) return await reply("Role not found: " + roleName);
         const existingUsernames = await db.getRoleMemberUsernames(role.id);
+        let added: string[] = [];
+        let already: string[] = [];
+        for (const username of usernames) {
         if (existingUsernames.includes(username)) {
-          return await reply(
-            "User `@" + username + "` is already in role `" + roleName + "`",
-          );
-        }
+            already.push(username);
+          } else {
         await db.addRoleToUserByUsername(role.id, username);
-        await reply(
-          "Role `" + roleName + "` assigned to user `@" + username + "`",
-        );
+            added.push(username);
+          }
+        }
+        let msg = "";
+        if (added.length)
+          msg +=
+            "Role `" + roleName + "` assigned to:\n" + added.map((u) => "`@" + u + "`").join("\n");
+        if (already.length)
+          msg += "\n\nAlready assigned:\n" + already.map((u) => "`@" + u + "`").join("\n");
+        await reply(msg.trim() || "No users assigned.");
       } catch (err: any) {
-        await reply("Failed to add user to role: " + err.message);
+        await reply("Failed to add user(s) to role: " + err.message);
       }
       break;
     }
     case "/unassign": {
       if (args.length < 2)
-        return await reply("Usage: /unassign <role_name> <@username>");
-      let [roleName, username] = args;
-      if (!username)
-        return await reply("Please provide a username as @username.");
-      if (username[0] === "@") username = username.slice(1);
-      username = username.toLowerCase();
+        return await reply("Usage: /unassign <role_name> <@username> [@username...]");
+      const roleName = args[0];
+      let usernames = args
+        .slice(1)
+        .map((u) => (u.startsWith("@") ? u.slice(1) : u))
+        .map((u) => u.toLowerCase());
       try {
         const role = await db.getRole(roleName, chatId);
         if (!role) return await reply("Role not found: " + roleName);
+        let removed: string[] = [];
+        for (const username of usernames) {
         await db.removeRoleFromUserByUsername(role.id, username);
-        await reply(
-          "Role `" + roleName + "` unassigned from user `@" + username + "`",
-        );
+          removed.push(username);
+        }
+        let msg = "";
+        if (removed.length)
+          msg +=
+            "Role `" +
+            roleName +
+            "` unassigned from:\n" +
+            removed.map((u) => "`@" + u + "`").join("\n");
+        await reply(msg.trim() || "No users unassigned.");
       } catch (err: any) {
-        await reply("Failed to remove user from role: " + err.message);
+        await reply("Failed to remove user(s) from role: " + err.message);
       }
       break;
     }
@@ -133,8 +150,8 @@ export async function handleTelegramCommand(
         "`/createrole <name>` — Create a new role\n" +
         "`/deleterole <role_name>` — Delete a role\n" +
         "`/listroles` — List all roles available in this chat\n" +
-        "`/assign <role_name> <@username>` — Assign a role to a user\n" +
-        "`/unassign <role_name> <@username>` — Unassign a role from a user\n" +
+        "`/assign <role_name> <@username> [@username ...]` — Assign a role to one or more users\n" +
+        "`/unassign <role_name> <@username> [@username ...]` — Unassign a role from one or more users\n" +
         "`/roleusers <role_name>` — View users assigned to a role\n" +
         "`/ping <role_name>` — Notify all users assigned to a role\n" +
         "`/help` — Show usage instructions";
