@@ -66,9 +66,13 @@ export async function handleTelegramCommand(
         let msg = "";
         if (added.length)
           msg +=
-            "Role `" + roleName + "` assigned to:\n" + added.map((u) => "`@" + u + "`").join("\n");
+            "Role `" +
+            roleName +
+            "` assigned to: " +
+            added.map((u) => "`@" + u + "`").join(" ") +
+            "\n";
         if (already.length)
-          msg += "\n\nAlready assigned:\n" + already.map((u) => "`@" + u + "`").join("\n");
+          msg += "Already assigned: " + already.map((u) => "`@" + u + "`").join(" ");
         await reply(msg.trim() || "No users assigned.");
       } catch (err: any) {
         await reply("Failed to add user(s) to role: " + err.message);
@@ -96,8 +100,8 @@ export async function handleTelegramCommand(
           msg +=
             "Role `" +
             roleName +
-            "` unassigned from:\n" +
-            removed.map((u) => "`@" + u + "`").join("\n");
+            "` unassigned from: " +
+            removed.map((u) => "`@" + u + "`").join(" ");
         await reply(msg.trim() || "No users unassigned.");
       } catch (err: any) {
         await reply("Failed to remove user(s) from role: " + err.message);
@@ -138,15 +142,15 @@ export async function handleTelegramCommand(
     }
     case "/help": {
       const helpMsg =
-        "*Available Commands:*\n\n" +
-        "`/createrole <name>` — Create a new role\n" +
-        "`/deleterole <role_name>` — Delete a role\n" +
-        "`/listroles` — List all roles available in this chat\n" +
-        "`/assign <role_name> <@username> [@username ...]` — Assign a role to one or more users\n" +
-        "`/unassign <role_name> <@username> [@username ...]` — Unassign a role from one or more users\n" +
-        "`/roleusers <role_name>` — View users assigned to a role\n" +
-        "`/ping <role_name>` — Notify all users assigned to a role\n" +
-        "`/help` — Show usage instructions";
+        "*Available Commands:*\n" +
+        "`/createrole <name>` - Create a new role\n" +
+        "`/deleterole <role_name>` - Delete a role\n" +
+        "`/listroles` - List all roles available in this chat\n" +
+        "`/assign <role_name> <@username> [@username ...]` - Assign a role to one or more users\n" +
+        "`/unassign <role_name> <@username> [@username ...]` - Unassign a role from one or more users\n" +
+        "`/roleusers <role_name>` - View users assigned to a role\n" +
+        "`/ping <role_name>` - Notify all users assigned to a role\n" +
+        "`/help` - Show usage instructions";
       await reply(helpMsg);
       break;
     }
