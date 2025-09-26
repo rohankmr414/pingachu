@@ -71,4 +71,10 @@ export class DB {
       .all();
     return rows.results.map((row: any) => row.username);
   }
+
+  async renameRole(oldName: string, newName: string, chatId: number): Promise<void> {
+    await this.DB.prepare("UPDATE roles SET name = ? WHERE name = ? AND chat_id = ?")
+      .bind(newName, oldName, chatId)
+      .run();
+  }
 }

@@ -30,6 +30,21 @@ export async function handleTelegramCommand(
       }
       break;
     }
+    case "/renamerole": {
+      if (args.length < 2)
+        return await reply("Usage: /renamerole <old_name> <new_name>");
+      const oldName = args[0];
+      const newName = args[1];
+      try {
+        const role = await db.getRole(oldName, chatId);
+        if (!role) return await reply("Role not found: " + oldName);
+        await db.renameRole(oldName, newName, chatId);
+        await reply("Role renamed from `" + oldName + "` to `" + newName + "`");
+      } catch (err: any) {
+        await reply("Failed to rename role: " + err.message);
+      }
+      break;
+    }
     case "/listroles": {
       try {
         const roles = await db.listRoles(chatId);
@@ -148,6 +163,8 @@ export async function handleTelegramCommand(
         "    Create a new role\n\n" +
         "/deleterole <role_name>\n" +
         "    Delete a role\n\n" +
+        "/renamerole <old_name> <new_name>\n" +
+        "    Rename a role\n\n" +
         "/listroles\n" +
         "    List all roles in this chat\n\n" +
         "/assign <role_name> <@user> [@user ...]\n" +
